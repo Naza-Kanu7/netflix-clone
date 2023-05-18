@@ -1,11 +1,11 @@
 import styles from "./navbar.module.css";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import expandMoreIcon from '../../public/static/expand_more.svg'
 import Image from "next/image";
 import netflixIcon from '../../public/static/netflix.svg'
 import { magic } from "../../lib/magic-client";
+import Link from "next/link";
 
 const NavBar = () => {
     const [showDropdown, setShowDropdown] = useState(false)
@@ -18,9 +18,7 @@ const NavBar = () => {
             try {
                 const { email, issuer } = await magic.user.getMetadata();
                 const didToken = await magic.user.getIdToken()
-                console.log({ didToken })
                 if(email) {
-                    console.log(email)
                     setUsername(email)
                 }
             } catch(error) {
@@ -51,9 +49,6 @@ const NavBar = () => {
     const handleSignOut = async (e) => {
         e.preventDefault()
         try {
-            // await magic.user.logout();
-            // console.log(await magic.user.isLoggedIn()); // => `false`
-            // router.push('/login')
             const response = await fetch("/api/logout", {
                 method: "POST",
                 headers: {
@@ -73,11 +68,11 @@ const NavBar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
-                <a className={styles.logoLink} href="/">
+                <Link className={styles.logoLink} href="/">
                     <div className={styles.logoWrapper}>
                         <Image src={netflixIcon} alt="Netflix Logo" width={148} height={34} />
                     </div>
-                </a>
+                </Link>
                 <ul className={styles.navItems}>
                     <li className={styles.navItem} onClick={handleOnClickHome}>
                         Home
@@ -94,9 +89,9 @@ const NavBar = () => {
                         </button>
                         {showDropdown && <div className={styles.navDropdown}>
                             <div>
-                                <a href='/login' className={styles.linkName} onClick={handleSignOut}>
+                                <Link href='/login' className={styles.linkName} onClick={handleSignOut}>
                                    Sign Out
-                                </a>
+                                </Link>
                                 <div className={styles.lineWrapper}></div>
                             </div>
                         </div>}

@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import { magic } from "../../lib/magic-client"
 import { useEffect } from "react"
+import Link from "next/link"
 
 
 const Login = () => {
@@ -30,7 +31,6 @@ const Login = () => {
 
     const handleOnChangeEmail = (e) => {
         setUserMsg('')
-        // console.log('event', e.target.value)
         const email = e.target.value
         setEmail(email)
     }
@@ -38,41 +38,33 @@ const Login = () => {
     const handleLogInWithEmail = async (e) => {
         
         e.preventDefault()
-        // console.log('btn clicked')
 
         if (email) {
-            // if(email === 'kanuchinaza70@gmail.com') {
-                try {
-                    setIsLoading(true)
-                    const didToken = await magic.auth.loginWithMagicLink({ email });
-                    console.log({didToken})
-                    if(didToken) {
+            try {
+                setIsLoading(true)
+                const didToken = await magic.auth.loginWithMagicLink({ email });
+                if(didToken) {
 
-                        const response = await fetch('/api/login', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${didToken}`,
-                                "Content-Type": "application/json"
-                            }
-                        })
-                        const loggedInResponse = await response.json()
-                        if (loggedInResponse.done) {
-                            console.log({loggedInResponse})
-                            router.push('/')
-                        } else {
-                            setIsLoading(false)
-                            setUserMsg('Something went wrong logging in')
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${didToken}`,
+                            "Content-Type": "application/json"
                         }
+                    })
+                    const loggedInResponse = await response.json()
+                    if (loggedInResponse.done) {
+                        router.push('/')
+                    } else {
+                        setIsLoading(false)
+                        setUserMsg('Something went wrong logging in')
                     }
-                } catch(err) {
-                    // Handle errors if required!
-                    console.error('Something went wrong logging in', err)
-                    setIsLoading(false)
                 }
-            // } else {
-            //     setIsLoading(false)
-            //     setUserMsg('Something went wrong')
-            // }
+            } catch(err) {
+                // Handle errors if required!
+                console.error('Something went wrong logging in', err)
+                setIsLoading(false)
+            }
         } else {
             setIsLoading(false)
             setUserMsg('Enter a valid email address')
@@ -86,11 +78,11 @@ const Login = () => {
             </Head>
             <header className={styles.header}>
                 <div className={styles.headerWrapper}>
-                    <a className={styles.logoLink} href="/">
+                    <Link className={styles.logoLink} href="/">
                         <div className={styles.logoWrapper}>
                             <Image src={netflixIcon} alt="Netflix Logo" width={148} height={34} />
                         </div>
-                    </a>
+                    </Link>
                 </div>
             </header>
             <main className={styles.main}>

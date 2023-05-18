@@ -12,11 +12,9 @@ Modal.setAppElement("#__next");
 
 export async function getStaticProps(context) {
 
-  console.log({context})
-
   const videoId = context.params.videoId
   const videoDetails = await getYoutubeVideoById(videoId)
-  console.log({videoDetails})
+ 
 
   return {
     props: {
@@ -38,7 +36,6 @@ export async function getStaticPaths() {
 }
 
 const Video = ({ videoDetails }) => {
-  console.log({videoDetails})
   const router = useRouter();
   const videoId = router.query.videoId
 
@@ -53,14 +50,6 @@ const Video = ({ videoDetails }) => {
     statistics: { viewCount } = { viewCount: 0 }, 
   } = videoDetails;
 
-  // useEffect(async () => {
-  //   const response = await fetch(`/api/stats?videoId=${videoId}`, {
-  //     method: 'GET'
-  //   })
-  //   const data = await response.json()
-  //   console.log({data})
-  // }, [])
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,10 +57,8 @@ const Video = ({ videoDetails }) => {
           method: 'GET'
         });
         const data = await response.json();
-        console.log(data.data);
         if (data.data.length > 0) {
           const favourited = data.data[0].favourited
-          console.log({favourited})
           if (favourited === 1) {
             setToggleLike(true)
           } else if (favourited === 0) {
@@ -103,7 +90,6 @@ const Video = ({ videoDetails }) => {
   }
 
   const handleToggleDislike = async () => {
-    console.log('handleToggleDislike')
     const val = !toggleDislike
     setToggleDislike(val)
     setToggleLike(toggleDislike)
@@ -113,7 +99,6 @@ const Video = ({ videoDetails }) => {
     console.log('data', await response.json())
   }
   const handleToggleLike = async () => {
-    console.log('handleToggleLike')
     const val = !toggleLike
     setToggleLike(val)
     setToggleDislike(toggleLike)

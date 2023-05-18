@@ -9,10 +9,8 @@ export default async function Login(req, res) {
         try{
             const auth = req.headers.authorization
             const didToken = auth ? auth.substr(7) : ''
-            // console.log({ didToken })
             
             const metaData = await magicAdmin.users.getMetadataByToken(didToken)
-            // console.log({ metaData })
             
             // create jwt
             const token = jwt.sign(
@@ -28,7 +26,6 @@ export default async function Login(req, res) {
                 },
                 process.env.JWT_SECRET
             )
-            // console.log({ token })
 
             // CHECK IF USER EXISTS
             const isNewUserQuery = await isNewUser(token, metaData.issuer)
@@ -46,17 +43,3 @@ export default async function Login(req, res) {
     }
 }
 
-// if (isNewUserQuery) {
-            //     // create a  new user
-            //     const createNewUserMutation = await createNewUser(token, metaData)
-            //     // console.log({ createNewUserMutation })
-            //     // set the cookie
-            //     const cookie = setTokenCookie(token, res)
-            //     console.log({cookie})
-            //     res.send({ done: true, msg: 'is a new user' }) 
-            // } else {
-            //     // set the cookie
-            //     const cookie = setTokenCookie(token, res)
-            //     console.log({cookie})
-            //     res.send({ done: true, msg: 'not a new user' }) 
-            // }
