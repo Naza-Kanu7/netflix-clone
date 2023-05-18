@@ -8,6 +8,16 @@ import useRedirectUser from "../../../utils/redirectUser"
 
 async function HandleUseRedirect(context) {
     const { userId, token } = await useRedirectUser(context);
+
+    if(!userId) {
+        return {
+          props: {},
+          redirect: {
+              destination: '/login',
+              permanent: false,
+          }
+        }
+    }
   
     return {
       userId,
