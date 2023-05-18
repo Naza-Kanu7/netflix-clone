@@ -5,28 +5,29 @@ import styles from '../../styles/MyList.module.css'
 import { getMyList } from "../../../lib/videos"
 import useRedirectUser from "../../../utils/redirectUser"
 
-export async function getServerSideProps(context) {
-    const { userId, token } = await useRedirectUser(context)
-    
 
-    // if (!userId) {
-    //     return {
-    //       props: {},
-    //       redirect: {
-    //         destination: "/login",
-    //         permanent: false,
-    //       },
-    //     };
-    // }
-    
-    const videos = await getMyList(userId, token)
-
+async function HandleUseRedirect(context) {
+    const { userId, token } = await useRedirectUser(context);
+  
+    return {
+      userId,
+      token,
+    };
+  }
+  
+  export async function getServerSideProps(context) {
+    const { userId, token } = await HandleUseRedirect(context);
+  
+    const videos = await getMyList(userId, token);
+  
     return { 
-        props: {
-           myListVideos: videos,
-        }
-    }
-}
+      props: {
+        myListVideos: videos,
+      }
+    };
+  }
+
+
 
 const MyList = ({ myListVideos }) => {
     return (
@@ -51,3 +52,27 @@ const MyList = ({ myListVideos }) => {
     )
 }
 export default MyList
+
+
+// export async function getServerSideProps(context) {
+//     const { userId, token } = await useRedirectUser(context)
+    
+
+//     if (!userId) {
+//         return {
+//           props: {},
+//           redirect: {
+//             destination: "/login",
+//             permanent: false,
+//           },
+//         };
+//     }
+    
+//     const videos = await getMyList(userId, token)
+
+//     return { 
+//         props: {
+//            myListVideos: videos,
+//         }
+//     }
+// }

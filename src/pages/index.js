@@ -9,8 +9,17 @@ import { verifyToken } from '../../lib/utils'
 import useRedirectUser from '../../utils/redirectUser'
 
 
-export async function getServerSideProps(context) {
+async function HandleUseRedirect(context) {
   const { userId, token } = await useRedirectUser(context)
+  return {
+    userId,
+    token,
+  };
+}
+
+
+export async function getServerSideProps(context) {
+  const { userId, token } = await HandleUseRedirect(context);
 
 
   // if(!userId) {
